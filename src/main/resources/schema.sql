@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS EMPLOYEE;
+
+CREATE TABLE EMPLOYEE (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FIRST_NAME varchar(250) not null,
+    LAST_NAME varchar(250) not null,
+    METADATA varchar(250)
+);
