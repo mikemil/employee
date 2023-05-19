@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,16 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-//@ComponentScan(basePackages = {"com.example.employee"})
 class EmployeeController {
 
-    //Map<String, Employee> cache = new HashMap<>();
     @Autowired
     EmployeeRepository employeeRepository;
 
@@ -32,7 +28,6 @@ class EmployeeController {
     }
 
     @GetMapping(value = "/employees/{id}", produces = APPLICATION_JSON_VALUE)
-    //public Employee getEmployee(@PathVariable Integer id) {
     public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
@@ -40,12 +35,11 @@ class EmployeeController {
     }
 
     @GetMapping(value="/employees", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Iterable<Employee>> getAllEmpsReturnsResponseEntity() {
-        System.out.println("getAllEmps called...");
+    public ResponseEntity<Iterable<Employee>> getAllEmployees() {
         return ResponseEntity.ok(employeeRepository.findAll());
     }
 
-    @PostMapping(value="/employeesEmployee", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/employees", produces = MediaType.APPLICATION_JSON_VALUE)
     public Employee createEmployee(@RequestBody EmployeeRec emp) {
         var employee = new Employee(emp.id(), emp.firstName(), emp.lastName(), emp.metadata());
         return employeeRepository.save(employee);
@@ -55,7 +49,13 @@ class EmployeeController {
     public Employee updateEmployee(@RequestBody EmployeeRec emp) {
         var employee = new Employee(emp.id(), emp.firstName(), emp.lastName(), emp.metadata());
         return employeeRepository.save(employee);
-
     }
 
+    @DeleteMapping(value = "/employees/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Employee> deleteEmployee(@PathVariable Integer id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        employeeRepository.delete(employee);
+        return ResponseEntity.ok().build();
+    }
 }
