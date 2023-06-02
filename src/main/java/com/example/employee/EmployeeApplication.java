@@ -25,6 +25,15 @@ class MyConfiguration {
 		return new MyBean();
 	}
 
+//	@Bean
+//	public SecurityWebFilterChain securityWebFilterChain(
+//			ServerHttpSecurity http) {
+//		return http.authorizeExchange()
+//				.pathMatchers("/actuator/**").permitAll()
+//				.anyExchange().authenticated()
+//				.and().build();
+//	}
+
 }
 
 //record Employee (@Id Integer id, String firstName, String lastName, String metadata) {}
